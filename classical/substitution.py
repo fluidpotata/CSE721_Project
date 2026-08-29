@@ -5,6 +5,8 @@ class Substitution:
         if len(key) != 26 or len(set(key)) != 26:
             raise ValueError("Key must contain 26 unique letters")
 
+        return key
+
 
     def encrypt(self, pt:str, key:str):
         ct = ""
