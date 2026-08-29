@@ -30,16 +30,58 @@ class DES:
 
         return l, r
 
+    def final_permutation(self):
+        pass
 
     # todo: key generation, shift, round keys
+    def generate_key(self):
+        pass
+
+    def left_shift(self):
+        pass
+
+    def generate_round_keys(self, key):
+        pass
+
+    def expand(self, r):
+        pass
+
+    def s_box_substitution(self, bits):
+        pass
+
+    def feistel(self):
+        pass
+
+    def round(self):
+        pass
+
+    def encrypt_block(self):
+        pass
+
+    def decrypt_block(self):
+        pass
+
+    def pad(self):
+        pass
+
+    def unpad(self):
+        pass
 
 
+    def text_to_bits(self, text:str):
+        bits = ""
+
+        for i in text:
+            bits += bin(ord(i))[2:].zfill(8)
+
+        return bits
+
+    def bits_to_text(self, bits):
+        pass
 
 
-def text_to_bits(text:str):
-    bits = ""
+    def encrypt(self):
+        pass
 
-    for i in text:
-        bits += bin(ord(i))[2:].zfill(8)
-
-    return bits
+    def decrypt(self):
+        pass
