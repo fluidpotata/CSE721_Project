@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 from utils.substitution_handler import handle_substitution
 from utils.transposition_handler import handle_double_transposition
-# from utils.des_handler import handle_des
+from utils.des_handler import handle_des
 from utils.aes_handler import handle_aes
-# from utils.rsa_handler import handle_rsa
+from utils.rsa_handler import handle_rsa
 # from utils.ecc_handler import handle_ecc
 
 
@@ -14,9 +14,9 @@ app = Flask(__name__)
 handlers = {
     "substitution": handle_substitution,
     "double_transposition": handle_double_transposition,
-    # "des": handle_des,
+    "des": handle_des,
     "aes": handle_aes,
-    # "rsa": handle_rsa,
+    "rsa": handle_rsa,
     # "ecc": handle_ecc
 }
 
