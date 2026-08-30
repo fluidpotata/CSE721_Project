@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CSE721 Project</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<main class="container">
+
+    <header class="header">
+        <h1>CSE721 Cryptography Lab</h1>
+
+        <p>
+            Classical and Modern Cryptographic Algorithms
+        </p>
+    </header>
+
+
+    <section class="panel">
+
+        <div class="field">
+            <label for="algorithm">
+                Algorithm
+            </label>
+
+            <select id="algorithm">
+
+                <option value="">
+                    Select an algorithm
+                </option>
+
+                <optgroup label="Classical Cryptography">
+
+                    <option value="substitution">
+                        Substitution Cipher
+                    </option>
+
+                    <option value="double_transposition">
+                        Double Transposition
+                    </option>
+
+                </optgroup>
+
+
+                <optgroup label="Symmetric Cryptography">
+
+                    <option value="des">
+                        DES
+                    </option>
+
+                    <option value="aes">
+                        AES
+                    </option>
+
+                </optgroup>
+
+
+                <optgroup label="Public-Key Cryptography">
+
+                    <option value="rsa">
+                        RSA
+                    </option>
+
+                    <option value="ecc">
+                        ECC
+                    </option>
+
+                </optgroup>
+
+            </select>
+        </div>
+
+
+        <div
+            id="operation-container"
+            class="field hidden"
+        >
+
+            <label for="operation">
+                Operation
+            </label>
+
+            <select id="operation"></select>
+
+        </div>
+
+
+        <form id="crypto-form">
+
+            <div id="input-fields"></div>
+
+            <button
+                id="submit-button"
+                type="submit"
+                class="hidden"
+            >
+                Run
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <section
+        id="error-box"
+        class="error-box hidden"
+    ></section>
+
+
+    <section
+        id="result-panel"
+        class="panel result-panel hidden"
+    >
+
+        <div id="result-content"></div>
+
+    </section>
+
+</main>
+
+
+<script
+    src="{{ url_for('static', filename='js/script.js') }}"
+></script>
+
+</body>
+</html>
