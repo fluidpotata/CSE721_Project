@@ -1,5 +1,4 @@
 def validate_substitution_key(key):
-
     if len(key) != 26:
         raise ValueError(
             "Substitution key must contain exactly 26 letters."

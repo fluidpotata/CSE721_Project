@@ -1,7 +1,7 @@
 from classical.substitution import Substitution
 
-from analysis import frequency_analysis
-from validators import validate_substitution_key
+from utils.analysis import frequency_analysis
+from utils.validators import validate_substitution_key
 
 
 def handle_substitution(form):
