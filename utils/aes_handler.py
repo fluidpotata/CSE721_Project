@@ -12,9 +12,14 @@ def handle_aes(data):
         if not plaintext:
             raise ValueError("Plaintext cannot be empty.")
 
-        ciphertext, key, round_keys = cipher.encrypt(
-            plaintext
-        )
+        ciphertext = cipher.encrypt(plaintext)
+
+        key = cipher.key.hex()
+
+        round_keys = [
+            round_key.hex()
+            for round_key in cipher.round_keys
+        ]
 
         return {
             "algorithm": "aes",
@@ -34,10 +39,19 @@ def handle_aes(data):
         if not key:
             raise ValueError("AES key cannot be empty.")
 
-        plaintext = cipher.decrypt(
-            ciphertext,
-            key
-        )
+        try:
+            cipher.key = bytes.fromhex(key)
+        except ValueError:
+            raise ValueError("AES key must be valid hexadecimal.")
+
+        if len(cipher.key) != 16:
+            raise ValueError(
+                "AES-128 key must be exactly 16 bytes."
+            )
+
+        cipher.key_expansion()
+
+        plaintext = cipher.decrypt(ciphertext)
 
         return {
             "algorithm": "aes",
