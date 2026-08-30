@@ -5,7 +5,7 @@ from utils.transposition_handler import handle_double_transposition
 from utils.des_handler import handle_des
 from utils.aes_handler import handle_aes
 from utils.rsa_handler import handle_rsa
-# from utils.ecc_handler import handle_ecc
+from utils.ecc_handler import handle_ecc
 
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ handlers = {
     "des": handle_des,
     "aes": handle_aes,
     "rsa": handle_rsa,
-    # "ecc": handle_ecc
+    "ecc": handle_ecc
 }
 
 
