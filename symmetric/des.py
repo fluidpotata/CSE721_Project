@@ -109,6 +109,16 @@ class DES:
                 [2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11]
             ]
         ]
+        self.P = [
+            16, 7, 20, 21,
+            29, 12, 28, 17,
+            1, 15, 23, 26,
+            5, 18, 31, 10,
+            2, 8, 24, 14,
+            32, 27, 3, 9,
+            19, 13, 30, 6,
+            22, 11, 4, 25
+        ]
 
     def permute(self, bits:str, table:list):
         result = ""
@@ -147,7 +157,7 @@ class DES:
         return key
 
     def left_shift(self, bits, n):
-        return bits[n:]+bits[n]
+        return bits[n:]+bits[:n]
 
     def generate_round_keys(self, key):
         round_keys = []
@@ -175,8 +185,8 @@ class DES:
         for i in range(8): #48 bits divided into  6 so 8 loop
             block = bits[i*6:(i+1)*6] #0-6,6-12,12-18...
 
-            row = int(block[0]+block[5])
-            col = int(block[1:5])
+            row = int(block[0]+block[5],2)
+            col = int(block[1:5],2)
 
             value = self.S_BOXES[i][row][col]
 
@@ -192,9 +202,9 @@ class DES:
 
         return r        
 
-    def one_round(self, l, r):
+    def one_round(self, l, r, round_key):
         new_l = r
-        new_r = self.xor(l, self.feistel(r))
+        new_r = self.xor(l, self.feistel(r, round_key))
 
         return new_l, new_r
 
