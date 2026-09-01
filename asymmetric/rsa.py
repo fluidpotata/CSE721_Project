@@ -139,6 +139,64 @@ class RSA:
         return plaintext
 
 
-    def factorization_attack(self, public_key):
-        # to do, optional
-        pass
+    def factorization_attack(self, public_key=None, max_attempts=100000):
+        if public_key is None:
+            public_key = self.public_key
+
+        if public_key is None:
+            raise ValueError("Public key not available.")
+
+        e, n = public_key
+
+        attempts = 0
+
+        if n % 2 == 0:
+            p = 2
+            q = n // 2
+
+        else:
+            p = None
+            q = None
+
+            divisor = 3
+
+            while divisor * divisor <= n:
+
+                attempts += 1
+
+                if attempts >= max_attempts:
+                    return {
+                        "success": False,
+                        "message": "Factorization failed within attempt limit.",
+                        "attempts": attempts
+                    }
+
+                if n % divisor == 0:
+                    p = divisor
+                    q = n // divisor
+                    break
+
+                divisor += 2
+
+        if p is None:
+            return {
+                "success": False,
+                "message": "Factors not found.",
+                "attempts": attempts
+            }
+
+        # Reconstruct phi(n)
+        phi = (p - 1) * (q - 1)
+
+        # Recover private exponent
+        d = pow(e, -1, phi)
+
+        recovered_private_key = (d, n)
+
+        return {
+            "success": True,
+            "p": p,
+            "q": q,
+            "private_key": recovered_private_key,
+            "attempts": attempts
+        }

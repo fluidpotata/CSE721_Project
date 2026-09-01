@@ -95,5 +95,69 @@ def handle_rsa(data):
             "plaintext": plaintext
         }
 
+    elif operation == "factorization_attack":
+        try:
+            e = int(data.get("e"))
+            n = int(data.get("n"))
+
+        except (TypeError, ValueError):
+            raise ValueError(
+                "Invalid RSA public key."
+            )
+
+        try:
+            max_attempts = int(
+                data.get("max_attempts") or 100000
+            )
+
+        except (TypeError, ValueError):
+            raise ValueError(
+                "Maximum attempts must be an integer."
+            )
+
+        if max_attempts <= 0:
+            raise ValueError(
+                "Maximum attempts must be greater than zero."
+            )
+
+        rsa = RSA()
+
+        attack = rsa.factorization_attack(
+            public_key=(e, n),
+            max_attempts=max_attempts
+        )
+
+
+        if not attack["success"]:
+
+            return {
+                "algorithm": "rsa",
+                "operation": "factorization_attack",
+
+                "success": False,
+                "message": attack["message"],
+                "attempts": attack["attempts"]
+            }
+
+
+        d, recovered_n = attack["private_key"]
+
+        return {
+            "algorithm": "rsa",
+            "operation": "factorization_attack",
+
+            "success": True,
+
+            "p": str(attack["p"]),
+            "q": str(attack["q"]),
+
+            "private_key": {
+                "d": str(d),
+                "n": str(recovered_n)
+            },
+
+            "attempts": attack["attempts"]
+        }
+
 
     raise ValueError("Invalid RSA operation.")

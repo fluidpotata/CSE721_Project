@@ -278,6 +278,10 @@ const algorithms = {
             {
                 value: "decrypt",
                 label: "Decrypt"
+            },
+            {
+                value: "factorization_attack",
+                label: "Factorization Attack"
             }
         ],
 
@@ -341,10 +345,30 @@ const algorithms = {
                     type: "textarea",
                     placeholder: "Enter n..."
                 }
+            ],
+
+            factorization_attack: [
+                {
+                    name: "e",
+                    label: "Public Exponent (e)",
+                    type: "textarea",
+                    placeholder: "Enter public exponent e..."
+                },
+                {
+                    name: "n",
+                    label: "Modulus (n)",
+                    type: "textarea",
+                    placeholder: "Enter modulus n..."
+                },
+                {
+                    name: "max_attempts",
+                    label: "Maximum Attempts",
+                    type: "number",
+                    placeholder: "100000"
+                }
             ]
         }
     },
-
 
     // -------------------------------------------------
     // ECC
@@ -984,7 +1008,6 @@ function renderRSA(result) {
                 result.public_key.n
             )}
 
-
             <h3>Private Key</h3>
 
             ${output(
@@ -998,23 +1021,79 @@ function renderRSA(result) {
             )}
         `;
 
-    } else if (
-        result.operation === "encrypt"
-    ) {
+    }
+
+    else if (result.operation === "encrypt") {
 
         html += output(
             "Ciphertext",
             result.ciphertext
         );
 
-    } else if (
-        result.operation === "decrypt"
-    ) {
+    }
+
+    else if (result.operation === "decrypt") {
 
         html += output(
             "Decrypted Plaintext",
             result.plaintext
         );
+
+    }
+
+    else if (
+        result.operation === "factorization_attack"
+    ) {
+
+        if (result.success) {
+
+            html += `
+                <h3>Factorization Successful</h3>
+
+                ${output(
+                    "Prime Factor p",
+                    result.p
+                )}
+
+                ${output(
+                    "Prime Factor q",
+                    result.q
+                )}
+
+                <h3>Recovered Private Key</h3>
+
+                ${output(
+                    "Private Exponent d",
+                    result.private_key.d
+                )}
+
+                ${output(
+                    "Modulus n",
+                    result.private_key.n
+                )}
+
+                ${output(
+                    "Attempts",
+                    result.attempts
+                )}
+            `;
+
+        } else {
+
+            html += `
+                <h3>Factorization Failed</h3>
+
+                ${output(
+                    "Message",
+                    result.message
+                )}
+
+                ${output(
+                    "Attempts",
+                    result.attempts
+                )}
+            `;
+        }
     }
 
 
