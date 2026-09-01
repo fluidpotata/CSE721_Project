@@ -4,21 +4,18 @@
 
 body {
     margin: 0;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    background: #f3f4f6;
-    color: #1f2937;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f5f5;
+    color: #222;
 }
 
 .container {
-    width: 92%;
-    max-width: 900px;
+    width: 90%;
+    max-width: 750px;
 
     margin: 40px auto;
+
+    text-align: center;
 }
 
 .header {
@@ -26,37 +23,37 @@ body {
 }
 
 .header h1 {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .header p {
     margin: 0;
-
-    color: #6b7280;
+    color: #666;
 }
 
 .panel {
     background: white;
 
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-
     padding: 25px;
 
     margin-bottom: 20px;
+
+    border: 1px solid #ddd;
+    border-radius: 6px;
 }
 
 .field {
     margin-bottom: 20px;
+
+    text-align: center;
 }
 
-.field label,
-.output-group label {
+.field label {
     display: block;
 
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 
-    font-weight: 600;
+    font-weight: bold;
 }
 
 input,
@@ -64,14 +61,14 @@ select,
 textarea {
     width: 100%;
 
-    padding: 11px;
+    padding: 10px;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
 
     font-size: 15px;
 
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-
-    background: white;
+    text-align: center;
 }
 
 textarea {
@@ -82,32 +79,24 @@ textarea {
     font-family: monospace;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-    outline: 2px solid #9ca3af;
-    outline-offset: 1px;
-}
-
 button {
     width: 100%;
 
-    padding: 12px 20px;
+    padding: 11px;
 
-    border: 0;
-    border-radius: 6px;
+    border: none;
+    border-radius: 4px;
 
-    background: #111827;
+    background: #222;
     color: white;
 
     font-size: 15px;
-    font-weight: 600;
 
     cursor: pointer;
 }
 
 button:hover {
-    background: #374151;
+    background: #444;
 }
 
 button:disabled {
@@ -115,32 +104,55 @@ button:disabled {
     cursor: not-allowed;
 }
 
+
+/* =========================
+   Result
+   ========================= */
+
+.result-panel {
+    text-align: center;
+}
+
 .result-panel h2 {
     margin-top: 0;
 }
 
 .result-panel h3 {
-    margin-top: 30px;
-    margin-bottom: 15px;
+    margin-top: 25px;
 }
 
 .output-group {
     margin-bottom: 18px;
 }
 
+.output-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: bold;
+}
+
 .output-box {
     padding: 12px;
 
-    background: #f9fafb;
+    background: #f5f5f5;
 
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 
     font-family: monospace;
+
+    text-align: center;
 
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
+
+
+/* =========================
+   DES / AES Round Keys
+   ========================= */
 
 .round-keys {
     display: flex;
@@ -150,29 +162,32 @@ button:disabled {
 }
 
 .round-key {
-    display: grid;
-
-    grid-template-columns: 50px 1fr;
-
-    gap: 10px;
-
-    align-items: start;
-
     padding: 10px;
 
-    background: #f9fafb;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
+    background: #f5f5f5;
+
+    text-align: center;
 }
 
 .round-key span {
-    font-weight: 600;
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-weight: bold;
 }
 
 .round-key code {
     overflow-wrap: anywhere;
 }
+
+
+/* =========================
+   ECC
+   ========================= */
 
 .parameter-grid {
     display: grid;
@@ -187,12 +202,12 @@ button:disabled {
 }
 
 .parameter {
-    padding: 12px;
+    padding: 10px;
 
-    background: #f9fafb;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
+    background: #f5f5f5;
 }
 
 .parameter span {
@@ -200,13 +215,11 @@ button:disabled {
 
     margin-bottom: 5px;
 
-    color: #6b7280;
+    color: #666;
 }
 
 .parameter strong {
     font-family: monospace;
-
-    overflow-wrap: anywhere;
 }
 
 .ecdh-grid {
@@ -217,53 +230,70 @@ button:disabled {
     gap: 20px;
 }
 
-.table-wrapper {
-    width: 100%;
 
+/* =========================
+   Tables
+   ========================= */
+
+.table-wrapper {
     overflow-x: auto;
 }
 
 table {
     width: 100%;
 
+    margin-top: 10px;
+
     border-collapse: collapse;
 }
 
 th,
 td {
-    padding: 10px 12px;
+    padding: 10px;
 
-    text-align: left;
+    border: 1px solid #ddd;
 
-    border-bottom:
-        1px solid #e5e7eb;
+    text-align: center;
 }
 
 th {
-    background: #f9fafb;
+    background: #f5f5f5;
 }
 
+
+/* =========================
+   Error
+   ========================= */
+
 .error-box {
-    padding: 15px;
+    padding: 12px;
 
     margin-bottom: 20px;
 
-    border: 1px solid #fecaca;
-    border-radius: 8px;
+    background: white;
 
-    background: #fef2f2;
+    border: 1px solid #999;
+    border-radius: 4px;
 
-    color: #991b1b;
+    color: #b00020;
+
+    text-align: center;
 }
+
+
+/* =========================
+   Utilities
+   ========================= */
 
 .hidden {
     display: none;
 }
 
 
-@media (max-width: 650px) {
+@media (max-width: 600px) {
 
     .container {
+        width: 94%;
         margin: 20px auto;
     }
 

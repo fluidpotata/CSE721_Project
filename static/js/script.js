@@ -65,32 +65,84 @@ const algorithms = {
 
     double_transposition: {
 
-        operations: [],
-
-        buttonText: "Run Double Transposition",
-
-        fields: [
+        operations: [
             {
-                name: "plaintext",
-                label: "Plaintext",
-                type: "textarea",
-                placeholder: "Enter plaintext..."
+                value: "encrypt",
+                label: "Encrypt"
             },
             {
-                name: "row_key",
-                label: "First Permutation Key",
-                type: "text",
-                placeholder: "2 0 1"
-            },
-            {
-                name: "column_key",
-                label: "Second Permutation Key",
-                type: "text",
-                placeholder: "1 3 0 2"
+                value: "decrypt",
+                label: "Decrypt"
             }
-        ]
-    },
+        ],
 
+        fields: {
+
+            encrypt: [
+                {
+                    name: "plaintext",
+                    label: "Plaintext",
+                    type: "textarea",
+                    placeholder: "Enter plaintext..."
+                },
+                {
+                    name: "row",
+                    label: "Rows",
+                    type: "number",
+                    placeholder: "Suggested automatically"
+                },
+                {
+                    name: "col",
+                    label: "Columns",
+                    type: "number",
+                    placeholder: "Suggested automatically"
+                },
+                {
+                    name: "row_key",
+                    label: "Row Permutation Key",
+                    type: "text",
+                    placeholder: "Example: 2 0 1"
+                },
+                {
+                    name: "column_key",
+                    label: "Column Permutation Key",
+                    type: "text",
+                    placeholder: "Example: 1 3 0 2"
+                }
+            ],
+
+            decrypt: [
+                {
+                    name: "ciphertext",
+                    label: "Ciphertext",
+                    type: "textarea",
+                    placeholder: "Enter ciphertext..."
+                },
+                {
+                    name: "row",
+                    label: "Rows",
+                    type: "number"
+                },
+                {
+                    name: "col",
+                    label: "Columns",
+                    type: "number"
+                },
+                {
+                    name: "row_key",
+                    label: "Row Permutation Key",
+                    type: "text",
+                    placeholder: "Example: 2 0 1"
+                },
+                {
+                    name: "column_key",
+                    label: "Column Permutation Key",
+                    type: "text",
+                    placeholder: "Example: 1 3 0 2"
+                }
+            ]
+        }
+    },
 
     // -------------------------------------------------
     // DES
@@ -470,16 +522,13 @@ function renderFields() {
 
         wrapper.className = "field";
 
-
         const label =
             document.createElement("label");
 
         label.htmlFor = field.name;
         label.textContent = field.label;
 
-
         let input;
-
 
         if (field.type === "textarea") {
 
@@ -510,22 +559,27 @@ function renderFields() {
             input.type = field.type;
         }
 
-
         input.id = field.name;
         input.name = field.name;
         input.required = true;
 
         if (field.placeholder) {
-            input.placeholder =
-                field.placeholder;
+            input.placeholder = field.placeholder;
         }
-
 
         wrapper.appendChild(label);
         wrapper.appendChild(input);
 
         inputFields.appendChild(wrapper);
     });
+
+
+if (
+    algorithm === "double_transposition" &&
+    operationSelect.value === "encrypt"
+) {
+    setupTranspositionSuggestions();
+}
 }
 
 
@@ -739,42 +793,62 @@ function renderSubstitution(result) {
 
 function renderTransposition(result) {
 
-    let html = `
-        <h2>Double Transposition Result</h2>
+    let html =
+        `<h2>Double Transposition Result</h2>`;
 
-        ${output(
+
+    if (result.operation === "encrypt") {
+
+        html += output(
             "Plaintext",
             result.plaintext
-        )}
+        );
 
-        ${output(
-            "First Permutation Key",
+        html += output(
+            "Matrix Size",
+            `${result.row} × ${result.col}`
+        );
+
+        html += output(
+            "Row Key",
             formatValue(result.row_key)
-        )}
+        );
 
-        ${output(
-            "Second Permutation Key",
+        html += output(
+            "Column Key",
             formatValue(result.column_key)
-        )}
+        );
 
-        ${output(
+        html += output(
             "Ciphertext",
             result.ciphertext
-        )}
+        );
 
-        ${output(
-            "Decrypted Text",
-            result.decrypted
-        )}
-    `;
+        html += frequencyTable(
+            result.frequency
+        );
 
-    html += frequencyTable(
-        result.frequency
-    );
+    } else {
+
+        html += output(
+            "Ciphertext",
+            result.ciphertext
+        );
+
+        html += output(
+            "Matrix Size",
+            `${result.row} × ${result.col}`
+        );
+
+        html += output(
+            "Decrypted Plaintext",
+            result.plaintext
+        );
+    }
+
 
     resultContent.innerHTML = html;
 }
-
 
 function renderSymmetric(result, name) {
 
@@ -1226,4 +1300,148 @@ function clearResult() {
 
     resultPanel.classList.add("hidden");
     resultContent.innerHTML = "";
+}
+
+function setupTranspositionSuggestions() {
+
+    const plaintext =
+        document.getElementById("plaintext");
+
+    const rowInput =
+        document.getElementById("row");
+
+    const colInput =
+        document.getElementById("col");
+
+    const rowKey =
+        document.getElementById("row_key");
+
+    const colKey =
+        document.getElementById("column_key");
+
+
+    let rowManuallyChanged = false;
+    let colManuallyChanged = false;
+
+
+    rowInput.addEventListener("input", () => {
+        rowManuallyChanged = true;
+
+        updatePermutationSuggestions(
+            rowInput,
+            colInput,
+            rowKey,
+            colKey
+        );
+    });
+
+
+    colInput.addEventListener("input", () => {
+        colManuallyChanged = true;
+
+        updatePermutationSuggestions(
+            rowInput,
+            colInput,
+            rowKey,
+            colKey
+        );
+    });
+
+
+    plaintext.addEventListener("input", () => {
+
+        const length =
+            plaintext.value.length;
+
+        if (length === 0) {
+            return;
+        }
+
+        const suggested =
+            suggestMatrixDimensions(length);
+
+
+        if (!rowManuallyChanged) {
+            rowInput.value =
+                suggested.row;
+        }
+
+        if (!colManuallyChanged) {
+            colInput.value =
+                suggested.col;
+        }
+
+
+        updatePermutationSuggestions(
+            rowInput,
+            colInput,
+            rowKey,
+            colKey
+        );
+    });
+}
+
+function suggestMatrixDimensions(length) {
+
+    let row =
+        Math.floor(
+            Math.sqrt(length)
+        );
+
+    if (row < 1) {
+        row = 1;
+    }
+
+    const col =
+        Math.ceil(
+            length / row
+        );
+
+    return {
+        row: row,
+        col: col
+    };
+}
+
+function updatePermutationSuggestions(
+    rowInput,
+    colInput,
+    rowKey,
+    colKey
+) {
+
+    const row =
+        parseInt(rowInput.value);
+
+    const col =
+        parseInt(colInput.value);
+
+
+    if (row > 0) {
+
+        rowKey.placeholder =
+            "Example: " +
+            createIdentityPermutation(row);
+
+    }
+
+
+    if (col > 0) {
+
+        colKey.placeholder =
+            "Example: " +
+            createIdentityPermutation(col);
+
+    }
+}
+
+
+function createIdentityPermutation(size) {
+
+    return Array
+        .from(
+            { length: size },
+            (_, i) => i
+        )
+        .join(" ");
 }
