@@ -38,26 +38,50 @@ const algorithms = {
 
     substitution: {
 
-        operations: [],
-
-        buttonText: "Run Substitution",
-
-        fields: [
+        operations: [
             {
-                name: "plaintext",
-                label: "Plaintext",
-                type: "textarea",
-                placeholder: "Enter plaintext..."
+                value: "encrypt",
+                label: "Encrypt"
             },
             {
-                name: "substitution_key",
-                label: "26-Letter Permutation Key",
-                type: "text",
-                placeholder: "QWERTYUIOPASDFGHJKLZXCVBNM"
+                value: "decrypt",
+                label: "Decrypt"
             }
-        ]
-    },
+        ],
 
+        fields: {
+
+            encrypt: [
+                {
+                    name: "plaintext",
+                    label: "Plaintext",
+                    type: "textarea",
+                    placeholder: "Enter plaintext..."
+                },
+                {
+                    name: "substitution_key",
+                    label: "26-Letter Permutation Key",
+                    type: "text",
+                    placeholder: "QWERTYUIOPASDFGHJKLZXCVBNM"
+                }
+            ],
+
+            decrypt: [
+                {
+                    name: "ciphertext",
+                    label: "Ciphertext",
+                    type: "textarea",
+                    placeholder: "Enter ciphertext..."
+                },
+                {
+                    name: "substitution_key",
+                    label: "26-Letter Permutation Key",
+                    type: "text",
+                    placeholder: "QWERTYUIOPASDFGHJKLZXCVBNM"
+                }
+            ]
+        }
+    },
 
     // -------------------------------------------------
     // Double Transposition
@@ -759,37 +783,56 @@ function renderResult(algorithm, result) {
 
 function renderSubstitution(result) {
 
-    let html = `
-        <h2>Substitution Cipher Result</h2>
+    let html =
+        `<h2>Substitution Cipher Result</h2>`;
 
-        ${output(
+
+    if (result.operation === "encrypt") {
+
+        html += output(
             "Plaintext",
             result.plaintext
-        )}
+        );
 
-        ${output(
+        html += output(
             "Key",
             result.key
-        )}
+        );
 
-        ${output(
+        html += output(
             "Ciphertext",
             result.ciphertext
-        )}
+        );
 
-        ${output(
-            "Decrypted Text",
-            result.decrypted
-        )}
-    `;
+        html += frequencyTable(
+            result.frequency
+        );
 
-    html += frequencyTable(
-        result.frequency
-    );
+    } else {
+
+        html += output(
+            "Ciphertext",
+            result.ciphertext
+        );
+
+        html += output(
+            "Key",
+            result.key
+        );
+
+        html += output(
+            "Decrypted Plaintext",
+            result.plaintext
+        );
+
+        html += frequencyTable(
+            result.frequency
+        );
+    }
+
 
     resultContent.innerHTML = html;
 }
-
 
 function renderTransposition(result) {
 

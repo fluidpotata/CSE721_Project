@@ -4,30 +4,79 @@ from utils.analysis import frequency_analysis
 from utils.validators import validate_substitution_key
 
 
-def handle_substitution(form):
-    plaintext = form.get("plaintext", "")
-    key = form.get("substitution_key", "").upper()
+def handle_substitution(data):
+    operation = data.get("operation")
+
+    key = data.get(
+        "substitution_key",
+        ""
+    ).upper()
 
     validate_substitution_key(key)
 
     cipher = Substitution()
 
-    ciphertext = cipher.encrypt(
-        plaintext,
-        key
-    )
+    if operation == "encrypt":
 
-    decrypted = cipher.decrypt(
-        ciphertext,
-        key
-    )
+        plaintext = data.get(
+            "plaintext",
+            ""
+        )
 
-    return {
-        "type": "substitution",
-        "algorithm": "Substitution Cipher",
-        "plaintext": plaintext,
-        "key": key,
-        "ciphertext": ciphertext,
-        "decrypted": decrypted,
-        "frequency": frequency_analysis(ciphertext)
-    }
+        if not plaintext:
+            raise ValueError(
+                "Plaintext cannot be empty."
+            )
+
+        ciphertext = cipher.encrypt(
+            plaintext,
+            key
+        )
+
+        return {
+            "algorithm": "substitution",
+            "operation": "encrypt",
+
+            "plaintext": plaintext,
+            "key": key,
+
+            "ciphertext": ciphertext,
+
+            "frequency":
+                frequency_analysis(ciphertext)
+        }
+
+    elif operation == "decrypt":
+
+        ciphertext = data.get(
+            "ciphertext",
+            ""
+        )
+
+        if not ciphertext:
+            raise ValueError(
+                "Ciphertext cannot be empty."
+            )
+
+        plaintext = cipher.decrypt(
+            ciphertext,
+            key
+        )
+
+        return {
+            "algorithm": "substitution",
+            "operation": "decrypt",
+
+            "ciphertext": ciphertext,
+            "key": key,
+
+            "plaintext": plaintext,
+
+            "frequency":
+                frequency_analysis(ciphertext)
+        }
+
+
+    raise ValueError(
+        "Invalid Substitution operation."
+    )
